@@ -59,7 +59,7 @@ A guest user inspects the Team panel, removes members, and views aggregated stat
 ### Edge Cases
 
 - PokeAPI rate limiting or network failures should show an accessible error with retry affordance and fallback to cached data where available.
-- Adding the same Pokémon twice is prevented; duplicates are either disallowed or explicitly allowed with clear UX (assumption: duplicates disallowed by default).
+ - Adding the same Pokémon twice is prevented; duplicates are disallowed by Pokémon `id`. Attempting to add a duplicate shows an accessible notice and does not modify the team.
 - Some Pokémon may lack official artwork or have missing stat values; handle gracefully with placeholders and messaging.
 
 ## Requirements *(mandatory)*
@@ -73,12 +73,13 @@ A guest user inspects the Team panel, removes members, and views aggregated stat
 - **FR-005**: The system MUST persist the team locally so that it restores on page reload for the same browser (guest experience).
 - **FR-006**: The system MUST compute and display combined team stats by summing each member's base stats for the six stat categories and show totals and per-stat bars in the Team panel.
 - **FR-007**: The system MUST enforce a maximum team size of 6 members and provide an accessible message when the limit is reached.
-4. **Given** the detail drawer is open, **When** the user clicks "Add to Team", **Then** the Team panel updates immediately to show the new member without requiring a full page reload.
 - **FR-008**: The system MUST cache API responses client-side to reduce repeated requests and respect the PokeAPI fair-use guidance; cached data should be used to serve detail views when fresh.
+ - **FR-008**: The system MUST cache API responses client-side to reduce repeated requests and respect the PokeAPI fair-use guidance; cached data should be used to serve detail views when fresh (recommended defaults: detail queries staleTime = 10 minutes; localStorage TTL = 1 hour).
 - **FR-009**: The system MUST provide keyboard navigation for the search box, result grid, detail drawer controls, and Team panel, including visible focus indicators.
 - **FR-010**: The UI MUST meet WCAG AA contrast requirements, support a default Light theme and a High Contrast theme, and surface clear focus rings for keyboard users.
-1. **Given** the Team panel has members, **When** the user removes a member, **Then** the member disappears and totals recalc without requiring a full page reload.
 - **FR-011**: All interactive controls MUST be reachable and operable via keyboard and provide accessible names and status announcements where appropriate (e.g., when adding/removing team members).
+
+ - **FR-012**: The system MUST prevent adding duplicate Pokémon to a team by Pokémon `id`. Attempting to add a duplicate MUST be a no-op and surface an accessible notice explaining the duplicate.
 
 ### Key Entities
 

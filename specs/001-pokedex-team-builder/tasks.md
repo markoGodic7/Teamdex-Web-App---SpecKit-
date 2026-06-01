@@ -6,11 +6,11 @@
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-- [ ] T001 Initialize Vite + React + TypeScript project in `frontend/` with basic `package.json` and `tsconfig.json` (frontend root)
-- [ ] T002 Install dependencies: `react`, `react-dom`, `vite`, `typescript`, `tailwindcss`, `shadcn/ui`, `@radix-ui/react-*`, `@tanstack/react-query`, `zod`, `clsx` and dev tools (postcss, autoprefixer) (frontend root)
-- [ ] T003 Configure Tailwind: `tailwind.config.ts` and `src/styles/tailwind.css`, add Light and High Contrast theme tokens (frontend/src)
-- [ ] T004 Create base app scaffolding: `src/main.tsx`, `src/App.tsx`, `src/index.css` and provider setup for React Query (frontend/src)
-- [ ] T005 Add project README with run and build instructions (README.md)
+- [x] T001 Initialize Vite + React + TypeScript project in `frontend/` with basic `package.json` and `tsconfig.json` (frontend root)
+- [x] T002 Install dependencies: `react`, `react-dom`, `vite`, `typescript`, `tailwindcss`, `shadcn/ui`, `@radix-ui/react-*`, `@tanstack/react-query`, `zod`, `clsx` and dev tools (postcss, autoprefixer) (frontend root)
+- [x] T003 Configure Tailwind: `tailwind.config.ts` and `src/styles/tailwind.css`, add Light and High Contrast theme tokens (frontend/src)
+- [x] T004 Create base app scaffolding: `src/main.tsx`, `src/App.tsx`, `src/index.css` and provider setup for React Query (frontend/src)
+- [x] T005 Add project README with run and build instructions (README.md)
 
 ---
 
