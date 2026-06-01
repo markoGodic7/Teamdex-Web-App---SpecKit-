@@ -140,6 +140,11 @@ PY
   if [[ -n "$_plan_abs" ]]; then
     PLAN_PATH="${_plan_abs#"$PROJECT_ROOT/"}"
   fi
+  elif [[ "$PLAN_PATH" == "$PROJECT_ROOT/"* ]]; then
+   PLAN_PATH="${PLAN_PATH#"$PROJECT_ROOT/"}"
+  elif [[ "$PLAN_PATH" == /* ]]; then
+   echo "agent-context: plan_path must be project-relative or under $PROJECT_ROOT; got '$PLAN_PATH'." >&2
+   exit 1
 fi
 
 CTX_PATH="$PROJECT_ROOT/$CONTEXT_FILE"

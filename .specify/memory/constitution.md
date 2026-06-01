@@ -1,50 +1,36 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# PokéTeam Builder Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Library-First (Frontend Focus)
+Every feature is built as a reusable component or hook. Components must be self-contained, props-driven, and independently testable. Avoid monolithic page components.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Type Safety
+All code must be written in TypeScript with strict mode enabled. Use `zod` for runtime validation at API boundaries. No `any` unless absolutely necessary (and documented).
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-First (NON-NEGOTIABLE)
+TDD mandatory for new features: write tests → get approval → watch them fail → implement. Red-Green-Refactor cycle strictly enforced. Unit tests for hooks and utilities; integration tests for data fetching.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Accessibility & Theming
+All UI must support Light and High Contrast themes (as per FR-009). Use semantic HTML, ARIA labels where needed, and test with keyboard navigation. No UI may lock to a single visual mode.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Performance & Caching
+Respect PokeAPI fair-use: staleTime ≥ 10 minutes for detail queries (FR-008). Avoid unnecessary refetches. Use React Query’s caching and deduplication; implement client-side caching for the name index.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Additional Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- **Technology Stack**: React 18+, Vite, Tailwind CSS, shadcn/ui, TanStack Query, Zod. No class components, no Redux.
+- **State Management**: Team state must be persisted to localStorage and recoverable across sessions.
+- **Error Handling**: All API calls must have user-friendly error handling; network failures should degrade gracefully.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- **Branching**: Feature branches off `main`; PRs require passing CI (lint, type‑check, tests) and at least one review.
+- **Code Quality**: ESLint + Prettier enforced; all comments in English.
+- **Documentation**: Each hook and component must have a JSDoc description of its purpose and props.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other practices. Amendments require a PR with rationale, team approval, and migration plan. All PRs must verify compliance with these principles. Complexity must be justified – YAGNI.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-06-01 | **Last Amended**: 2025-06-01

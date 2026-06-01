@@ -23,7 +23,9 @@ If the user explicitly provided `GIT_BRANCH_NAME` (e.g., via environment variabl
 
 ## Prerequisites
 
-- Verify Git is available by running `git rev-parse --is-inside-work-tree 2>/dev/null`
+- Verify Git is available by running:
+  - Bash: `git rev-parse --is-inside-work-tree 2>/dev/null`
+  - PowerShell: `git rev-parse --is-inside-work-tree 2>$null`
 - If Git is not available, warn the user and skip branch creation
 
 ## Branch Numbering Mode

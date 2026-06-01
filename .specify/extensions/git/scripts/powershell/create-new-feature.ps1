@@ -133,8 +133,14 @@ function Get-NextBranchNumber {
         $highestBranch = [Math]::Max($highestBranch, $highestRemote)
     } else {
         try {
+            $previousPrompt = $env:GIT_TERMINAL_PROMPT
+            $env:GIT_TERMINAL_PROMPT = '0'
             git fetch --all --prune 2>$null | Out-Null
-        } catch { }
+        } catch {
+            Write-Verbose "Could not fetch remote refs: $_"
+        } finally {
+            $env:GIT_TERMINAL_PROMPT = $previousPrompt
+        }
         $highestBranch = Get-HighestNumberFromBranches
     }
 

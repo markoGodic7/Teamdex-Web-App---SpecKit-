@@ -128,8 +128,18 @@ if (-not $enabled) {
 $savedEAP = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
 try {
-    git diff --quiet HEAD 2>$null; $d1 = $LASTEXITCODE
-    git diff --cached --quiet 2>$null; $d2 = $LASTEXITCODE
+    # Check if HEAD exists (repo may have no commits yet)
+    git rev-parse --verify HEAD 2>$null | Out-Null
+    $hasHead = ($LASTEXITCODE -eq 0)
+
+    if ($hasHead) {
+        git diff --quiet HEAD 2>$null; $d1 = $LASTEXITCODE
+        git diff --cached --quiet 2>$null; $d2 = $LASTEXITCODE
+    } else {
+        # No HEAD → treat as no diff, only untracked files matter
+        $d1 = 0
+        $d2 = 0
+    }
     $untracked = git ls-files --others --exclude-standard 2>$null
 } finally {
     $ErrorActionPreference = $savedEAP
@@ -155,6 +165,16 @@ if (-not $commitMsg) {
 $savedEAP = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
 try {
+    # Guard: refuse to auto-commit if the working tree was dirty before the command
+    git diff --quiet 2>$null
+    $dirtyTracked = ($LASTEXITCODE -ne 0)
+    git diff --cached --quiet 2>$null
+    $dirtyStaged = ($LASTEXITCODE -ne 0)
+    $untrackedFiles = git ls-files --others --exclude-standard 2>$null
+    if ($dirtyTracked -or $dirtyStaged -or $untrackedFiles) {
+        Write-Warning "[specify] Working tree not clean. Skipping auto-commit to avoid committing unrelated changes."
+        exit 0
+    }
     $out = git add . 2>&1 | Out-String
     if ($LASTEXITCODE -ne 0) { throw "git add failed: $out" }
     $out = git commit -q -m $commitMsg 2>&1 | Out-String

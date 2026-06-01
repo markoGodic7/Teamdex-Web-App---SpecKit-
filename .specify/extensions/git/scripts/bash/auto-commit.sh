@@ -118,7 +118,18 @@ if [ "$_enabled" != "true" ]; then
 fi
 
 # Check if there are changes to commit
-if git diff --quiet HEAD 2>/dev/null && git diff --cached --quiet 2>/dev/null && [ -z "$(git ls-files --others --exclude-standard 2>/dev/null)" ]; then
+    
+if git rev-parse --verify HEAD >/dev/null 2>&1; then
+    _has_worktree_changes=false
+    git diff --quiet HEAD 2>/dev/null || _has_worktree_changes=true
+else
+    _has_worktree_changes=false
+fi
+
+if [ "$_has_worktree_changes" = "false" ] \
+   && git diff --cached --quiet 2>&1 \
+   && [ -z "$(git ls-files --others --exclude-standard 2>/dev/null)" ]; then
+    
     echo "[specify] No changes to commit after $EVENT_NAME" >&2
     exit 0
 fi

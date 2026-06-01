@@ -59,7 +59,9 @@ git config --get remote.origin.url
 > [!CAUTION]
 > ONLY PROCEED TO NEXT STEPS IF THE REMOTE IS A GITHUB URL
 
-1. For each task in the list, use the GitHub MCP server to create a new issue in the repository that is representative of the Git remote.
+1. For each task in the list:
+   a. **Lookup**: Search the target GitHub repository for an existing issue that contains a unique marker (e.g., `[TaskID: T001]` or a stable task title) using the GitHub MCP server’s issue search.
+   b. **Create only if not found**: If no matching issue exists, create a new issue with a title and body that include the same unique marker (for example, add `[TaskID: T001]` at the top of the body). If an issue already exists, skip creation for that task.
 
 > [!CAUTION]
 > UNDER NO CIRCUMSTANCES EVER CREATE ISSUES IN REPOSITORIES THAT DO NOT MATCH THE REMOTE URL

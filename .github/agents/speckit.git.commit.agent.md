@@ -18,7 +18,7 @@ This command is invoked as a hook after (or before) core commands. It:
 3. Looks up the specific event key to see if auto-commit is enabled
 4. Falls back to `auto_commit.default` if no event-specific key exists
 5. Uses the per-command `message` if configured, otherwise a default message
-6. If enabled and there are uncommitted changes, runs `git add .` + `git commit`
+6. If enabled and the working tree is clean (no pre-existing changes), commits only the files generated or modified by the command. Otherwise skips with a warning to prevent mixing unrelated work.
 
 ## Execution
 

@@ -49,6 +49,11 @@ if ([string]::IsNullOrWhiteSpace($featureDesc)) {
     exit 1
 }
 
+if ($Number -lt 0) {
+    Write-Error "Error: -Number must be a positive integer"
+    exit 1
+}
+
 function Get-HighestNumberFromSpecs {
     param([string]$SpecsDir)
 
@@ -139,12 +144,15 @@ function Get-NextBranchNumber {
         $highestRemote = Get-HighestNumberFromRemoteRefs
         $highestBranch = [Math]::Max($highestBranch, $highestRemote)
     } else {
-        # Fetch all remotes to get latest branch info (suppress errors if no remotes)
-        try {
+        # Fetch all remotes to get latest branch info.
+        $remotes = git remote 2>$null
+        if ($remotes) {
             git fetch --all --prune 2>$null | Out-Null
-        } catch {
-            # Ignore fetch errors
-        }
+            if ($LASTEXITCODE -ne 0) {
+                Write-Error "Error: Failed to refresh remote branch state before allocating the next feature number."
+                exit 1
+            }
++        }
         $highestBranch = Get-HighestNumberFromBranches
     }
 

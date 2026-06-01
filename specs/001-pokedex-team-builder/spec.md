@@ -73,7 +73,6 @@ A guest user inspects the Team panel, removes members, and views aggregated stat
 - **FR-005**: The system MUST persist the team locally so that it restores on page reload for the same browser (guest experience).
 - **FR-006**: The system MUST compute and display combined team stats by summing each member's base stats for the six stat categories and show totals and per-stat bars in the Team panel.
 - **FR-007**: The system MUST enforce a maximum team size of 6 members and provide an accessible message when the limit is reached.
-- **FR-008**: The system MUST cache API responses client-side to reduce repeated requests and respect the PokeAPI fair-use guidance; cached data should be used to serve detail views when fresh.
  - **FR-008**: The system MUST cache API responses client-side to reduce repeated requests and respect the PokeAPI fair-use guidance; cached data should be used to serve detail views when fresh (recommended defaults: detail queries staleTime = 10 minutes; localStorage TTL = 1 hour).
 - **FR-009**: The system MUST provide keyboard navigation for the search box, result grid, detail drawer controls, and Team panel, including visible focus indicators.
 - **FR-010**: The UI MUST meet WCAG AA contrast requirements, support a default Light theme and a High Contrast theme, and surface clear focus rings for keyboard users.

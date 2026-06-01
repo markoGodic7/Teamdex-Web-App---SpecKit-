@@ -52,6 +52,17 @@ $tasksTemplate = Resolve-Template -TemplateName 'tasks-template' -RepoRoot $path
 if (-not $tasksTemplate -or -not (Test-Path -LiteralPath $tasksTemplate -PathType Leaf)) {
     $expectedCoreTemplate = Join-Path $paths.REPO_ROOT '.specify/templates/tasks-template.md'
     [Console]::Error.WriteLine("ERROR: Tasks template not found for repository root: $($paths.REPO_ROOT)`nTemplate resolution order: overrides -> presets -> extensions -> core.`nExpected shared/core template location: $expectedCoreTemplate`nTo continue, verify whether 'tasks-template.md' is available in '.specify/templates/overrides/', preset templates, extension templates, or restore the shared/core templates (for example by re-running 'specify init') so that '.specify/templates/tasks-template.md' exists.")
+    
+    $errorMsg = @"
+ERROR: Tasks template not found for repository root: $($paths.REPO_ROOT)
+Template resolution order: overrides -> presets -> extensions -> core.
+Expected shared/core template location: $expectedCoreTemplate
+To continue, verify whether 'tasks-template.md' is available in '.specify/templates/overrides/', 
+preset templates, extension templates, or restore the shared/core templates (for example by 
+re-running 'specify init') so that '.specify/templates/tasks-template.md' exists.
+"@
+    [Console]::Error.WriteLine($errorMsg)
+    
     exit 1
 }
 $tasksTemplate = (Resolve-Path -LiteralPath $tasksTemplate).Path

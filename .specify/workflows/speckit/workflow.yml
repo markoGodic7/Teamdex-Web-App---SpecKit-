@@ -45,6 +45,7 @@ steps:
     integration: "{{ inputs.integration }}"
     input:
       args: "{{ inputs.spec }}"
+      scope: "{{ inputs.scope }}"
 
   - id: review-spec
     type: gate
@@ -57,7 +58,7 @@ steps:
     integration: "{{ inputs.integration }}"
     input:
       args: "{{ inputs.spec }}"
-
+      scope: "{{ inputs.scope }}"
   - id: review-plan
     type: gate
     message: "Review the plan before generating tasks."
@@ -69,9 +70,11 @@ steps:
     integration: "{{ inputs.integration }}"
     input:
       args: "{{ inputs.spec }}"
+      scope: "{{ inputs.scope }}"
 
   - id: implement
     command: speckit.implement
     integration: "{{ inputs.integration }}"
     input:
       args: "{{ inputs.spec }}"
+      scope: "{{ inputs.scope }}"

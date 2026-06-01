@@ -145,7 +145,8 @@ Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generate
    - Skip if project is purely internal (build scripts, one-off tools, etc.)
 
 3. **Agent context update**:
-   - Update the plan reference between the `<!-- SPECKIT START -->` and `<!-- SPECKIT END -->` markers in `.github/copilot-instructions.md` to point to the plan file created in step 1 (the IMPL_PLAN path)
+   - If `.specify/extensions.yml` exists, read the agent-context `context_file` setting (if defined) and use that as the target file. Otherwise, default to `.github/copilot-instructions.md`.
+   - Update the plan reference between the `<!-- SPECKIT START -->` and `<!-- SPECKIT END -->` markers in that target file to point to the plan file created in step 1 (the IMPL_PLAN path).
 
 **Output**: data-model.md, /contracts/*, quickstart.md, updated agent context file
 

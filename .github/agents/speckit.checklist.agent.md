@@ -254,7 +254,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 - Simple, memorable filenames that indicate checklist purpose
 - Easy identification and navigation in the `checklists/` folder
 
-To avoid clutter, use descriptive types and clean up obsolete checklists when done.
+To avoid clutter, use descriptive filenames. Cleanup of obsolete checklists should be performed manually outside of `/speckit.checklist`.
 
 ## Example Checklist Types & Sample Items
 

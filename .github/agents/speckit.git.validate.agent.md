@@ -12,9 +12,16 @@ Validate that the current Git branch follows the expected feature branch naming 
 ## Prerequisites
 
 - Check if Git is available by running `git rev-parse --is-inside-work-tree 2>/dev/null`
-- If Git is not available, output a warning and skip validation:
+- **If Git is not available**:
+  1. Check for the `SPECIFY_FEATURE` environment variable.
+     - If set, validate that value against the branch naming patterns (see Validation Rules).
+     - If it matches, output the success message (✓ On feature branch: …) and attempt to find the corresponding spec directory.
+     - If it does not match, output the error message (✗ Not on a feature branch…) with the current value.
+  2. If `SPECIFY_FEATURE` is also not set, **only then** output a warning and skip validation:
   ```
   [specify] Warning: Git repository not detected; skipped branch validation
+
+  - If Git **is** available, proceed with the normal branch validation using `git rev-parse --abbrev-ref HEAD`.
   ```
 
 ## Validation Rules

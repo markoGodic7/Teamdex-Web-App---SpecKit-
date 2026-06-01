@@ -172,7 +172,7 @@ check_existing_branches() {
             highest_branch=$highest_remote
         fi
     else
-        git fetch --all --prune >/dev/null 2>&1 || true
+        GIT_TERMINAL_PROMPT=0 git fetch --all --prune >/dev/null 2>&1 || true
         local highest_branch=$(get_highest_from_branches)
     fi
 
@@ -323,6 +323,11 @@ else
         BRANCH_SUFFIX=$(clean_branch_name "$SHORT_NAME")
     else
         BRANCH_SUFFIX=$(generate_branch_name "$FEATURE_DESCRIPTION")
+    fi
+
+    if [ -z "$BRANCH_SUFFIX" ]; then
+        echo "Error: Feature description/short name did not produce a valid branch suffix" >&2
+        exit 1
     fi
 
     # Warn if --number and --timestamp are both specified
