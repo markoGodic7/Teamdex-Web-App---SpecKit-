@@ -71,33 +71,64 @@ function saveToStorage(members: TeamMember[]) {
   }
 }
 
+// Module-level store so multiple hook consumers stay in sync
+let storeMembers: TeamMember[] = loadFromStorage();
+const listeners = new Set<(members: TeamMember[]) => void>();
+
+function notifyStore() {
+  try {
+    saveToStorage(storeMembers);
+  } catch (e) {
+    // ignore
+  }
+  listeners.forEach((fn) => {
+    try { fn(storeMembers); } catch (e) { /* ignore listener errors */ }
+  });
+}
+
+function storeAdd(member: TeamMember) {
+  if (storeMembers.find((m) => m.id === member.id)) {
+    return { success: false, reason: 'duplicate' } as const;
+  }
+  if (storeMembers.length >= MAX_TEAM) {
+    return { success: false, reason: 'full' } as const;
+  }
+  storeMembers = [...storeMembers, member];
+  notifyStore();
+  return { success: true } as const;
+}
+
+function storeRemove(id: number) {
+  storeMembers = storeMembers.filter((m) => m.id !== id);
+  notifyStore();
+}
+
+function storeClear() {
+  storeMembers = [];
+  notifyStore();
+}
+
+function storeContains(id: number) {
+  return storeMembers.some((m) => m.id === id);
+}
+
 export function useTeam() {
-  const [members, setMembers] = useState<TeamMember[]>(() => loadFromStorage());
+  const [members, setMembers] = useState<TeamMember[]>(storeMembers);
 
   useEffect(() => {
-    saveToStorage(members);
-  }, [members]);
+    const onChange = (m: TeamMember[]) => setMembers(m);
+    listeners.add(onChange);
+    // ensure initial sync
+    setMembers(storeMembers);
+    return () => { listeners.delete(onChange); };
+  }, []);
 
   const totals = useMemo(() => computeTotals(members), [members]);
 
-  const add = useCallback((member: TeamMember) => {
-    if (members.find((m) => m.id === member.id)) {
-      return { success: false, reason: 'duplicate' } as const;
-    }
-    if (members.length >= MAX_TEAM) {
-      return { success: false, reason: 'full' } as const;
-    }
-    setMembers((prev) => [...prev, member]);
-    return { success: true } as const;
-  }, [members]);
-
-  const remove = useCallback((id: number) => {
-    setMembers((prev) => prev.filter((m) => m.id !== id));
-  }, []);
-
-  const clear = useCallback(() => setMembers([]), []);
-
-  const contains = useCallback((id: number) => members.some((m) => m.id === id), [members]);
+  const add = useCallback((member: TeamMember) => storeAdd(member), []);
+  const remove = useCallback((id: number) => storeRemove(id), []);
+  const clear = useCallback(() => storeClear(), []);
+  const contains = useCallback((id: number) => storeContains(id), [members]);
 
   return { members, totals, add, remove, clear, contains };
 }
