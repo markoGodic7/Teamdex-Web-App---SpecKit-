@@ -9,3 +9,36 @@ html, body, #root {
 body {
   @apply bg-white text-slate-900 antialiased;
 }
+
+/* High Contrast theme */
+.hc {
+  --bg: #000000;
+  --text: #ffffff;
+  --muted: #ffd966;
+}
+
+.hc body, .hc #root {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.6);
+  border-radius: 4px;
+}
+
+/* Make .object-contain usable on wrapper divs as well as on img elements
+   - when used on a div with a background image, ensure the background is contained
+   - when used on a wrapper, ensure any child img uses object-fit: contain
+   - also support applying directly to imgs (keeps Tailwind behavior consistent)
+*/
+.object-contain {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.object-contain img {
+  object-fit: contain;
+}
