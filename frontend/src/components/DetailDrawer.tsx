@@ -4,6 +4,14 @@ import { getPokemon } from '../lib/api';
 import { useTeam } from '../hooks/useTeam';
 
 export default function DetailDrawer({ idOrName, onClose }: { idOrName: string | number | null; onClose: () => void }) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!idOrName) return;
+    ref.current?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [idOrName, onClose]);
   const { data, isLoading, error } = useQuery(['pokemon', idOrName], () => getPokemon(idOrName as any), {
     enabled: !!idOrName,
   });
@@ -13,7 +21,7 @@ export default function DetailDrawer({ idOrName, onClose }: { idOrName: string |
   if (!idOrName) return null;
 
   return (
-    <div className="fixed right-0 top-0 h-full w-full md:w-1/3 bg-white border-l p-4 shadow-lg z-50">
+    <div ref={ref} role="dialog" aria-modal="true" tabIndex={-1} className="fixed right-0 top-0 h-full w-full md:w-1/3 bg-white border-l p-4 shadow-lg z-50">
       <button onClick={onClose} className="mb-4">Close</button>
       {isLoading && (
         <div>

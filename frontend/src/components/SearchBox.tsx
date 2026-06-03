@@ -50,17 +50,24 @@ export default function SearchBox({ onSelect }: { onSelect: (idOrName: string) =
       <label className="sr-only">Search Pokémon</label>
       <input
         className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2"
-        placeholder="Search by name or id..."
+        placeholder="Search by name..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKey}
+        role="combobox"
+        aria-expanded={suggestions.length > 0}
+        aria-controls="search-suggestions"
+        aria-activedescendant={suggestions.length ? `suggestion-${active}` : undefined}
         aria-autocomplete="list"
       />
       {suggestions.length > 0 && (
-        <ul className="bg-white border mt-1 rounded shadow max-h-56 overflow-auto">
+        <ul id="search-suggestions" role="listbox" className="bg-white border mt-1 rounded shadow max-h-56 overflow-auto">
           {suggestions.map((s, i) => (
             <li
               key={s}
+              id={`suggestion-${i}`}
+              role="option"
+              aria-selected={i === active}
               className={`px-3 py-2 cursor-pointer ${i === active ? 'bg-slate-100' : ''}`}
               onClick={() => choose(s)}
             >

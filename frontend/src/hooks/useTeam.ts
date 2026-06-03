@@ -56,7 +56,8 @@ function loadFromStorage(): TeamMember[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    return JSON.parse(raw) as TeamMember[];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as TeamMember[]) : [];
   } catch (e) {
     console.warn('loadFromStorage failed', e);
     return [];

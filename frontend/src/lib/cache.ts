@@ -31,5 +31,9 @@ export function getCached<T>(key: string): T | null {
 }
 
 export function removeCached(key: string) {
-  try { localStorage.removeItem(key); } catch {};
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // ignore - key may not exist or storage unavailable
+  }
 }

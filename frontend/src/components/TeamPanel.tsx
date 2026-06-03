@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTeam } from '../hooks/useTeam';
 
-function StatBar({ label, value, max = 600 }: { label: string; value: number; max?: number }) {
+function StatBar({ label, value, max }: { label: string; value: number; max: number }) {
   const pct = Math.min(100, Math.round((value / max) * 100));
   return (
     <div className="py-1">
@@ -17,6 +17,17 @@ export default function TeamPanel() {
   const { members, totals, remove } = useTeam();
 
   const FALLBACK_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect fill="%23e2e8f0" width="48" height="48"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="8">No Image</text></svg>';
+
+  // Compute dynamic max for team stat bars (highest stat among all totals, min 1 to avoid divide by zero)
+  const maxTeamStat = Math.max(
+    totals.hp,
+    totals.attack,
+    totals.defense,
+    totals.specialAttack,
+    totals.specialDefense,
+    totals.speed,
+    1
+  );
 
   return (
     <div className="border rounded p-4">
@@ -44,12 +55,12 @@ export default function TeamPanel() {
 
       <div className="mt-4">
         <h3 className="font-medium">Totals</h3>
-        <StatBar label="HP" value={totals.hp} />
-        <StatBar label="Attack" value={totals.attack} />
-        <StatBar label="Defense" value={totals.defense} />
-        <StatBar label="Sp. Attack" value={totals.specialAttack} />
-        <StatBar label="Sp. Defense" value={totals.specialDefense} />
-        <StatBar label="Speed" value={totals.speed} />
+        <StatBar label="HP" value={totals.hp} max={maxTeamStat} />
+        <StatBar label="Attack" value={totals.attack} max={maxTeamStat} />
+        <StatBar label="Defense" value={totals.defense} max={maxTeamStat} />
+        <StatBar label="Sp. Attack" value={totals.specialAttack} max={maxTeamStat} />
+        <StatBar label="Sp. Defense" value={totals.specialDefense} max={maxTeamStat} />
+        <StatBar label="Speed" value={totals.speed} max={maxTeamStat} />
       </div>
     </div>
   );

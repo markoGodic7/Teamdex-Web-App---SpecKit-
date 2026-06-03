@@ -22,12 +22,8 @@ body {
   color: var(--text) !important;
 }
 
-/* Focus visibility improvements */
-:focus {
-  outline: none;
-}
-
 .focus-ring:focus {
+  outline: none;
   box-shadow: 0 0 0 3px rgba(59,130,246,0.6);
   border-radius: 4px;
 }
