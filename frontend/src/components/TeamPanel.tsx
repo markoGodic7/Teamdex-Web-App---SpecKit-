@@ -1,6 +1,11 @@
 import React from 'react';
 import { useTeam } from '../hooks/useTeam';
 
+import { useEffect, useRef, useState } from 'react';
+
+// TeamPanel includes an aria-live region to announce additions/removals for screen reader users.
+// It also listens for `team:announce` CustomEvents dispatched by other components to show messages.
+
 function StatBar({ label, value, max }: { label: string; value: number; max: number }) {
   const pct = Math.min(100, Math.round((value / max) * 100));
   return (
@@ -15,6 +20,39 @@ function StatBar({ label, value, max }: { label: string; value: number; max: num
 
 export default function TeamPanel() {
   const { members, totals, remove } = useTeam();
+  const prevRef = useRef<number[]>([]);
+  const initializedRef = useRef(false);
+  const [liveMessage, setLiveMessage] = useState<string>('');
+
+  useEffect(() => {
+    // Listen for external announcements (e.g., errors) dispatched by other components
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent)?.detail;
+      if (detail && typeof detail.message === 'string') setLiveMessage(detail.message);
+    };
+    window.addEventListener('team:announce', handler as EventListener);
+    return () => window.removeEventListener('team:announce', handler as EventListener);
+  }, []);
+
+  useEffect(() => {
+    const currIds = members.map((m) => m.id);
+    if (!initializedRef.current) {
+      prevRef.current = currIds;
+      initializedRef.current = true;
+      return;
+    }
+    const prevIds = prevRef.current;
+    // detect additions
+    const added = currIds.filter((id) => id != null && !prevIds.includes(id));
+    const removed = prevIds.filter((id) => id != null && !currIds.includes(id));
+    if (added.length > 0) {
+      const addedNames = members.filter((m) => added.includes(m.id)).map((m) => m.name).join(', ');
+      setLiveMessage(`Added to team: ${addedNames}`);
+    } else if (removed.length > 0) {
+      setLiveMessage(`Removed from team`);
+    }
+    prevRef.current = currIds;
+  }, [members]);
 
   const FALLBACK_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect fill="%23e2e8f0" width="48" height="48"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="8">No Image</text></svg>';
 
@@ -52,6 +90,11 @@ export default function TeamPanel() {
           ))}
         </div>
       )}
+
+        {/* aria-live region for screen readers */}
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
+          {liveMessage}
+        </div>
 
       <div className="mt-4">
         <h3 className="font-medium">Totals</h3>

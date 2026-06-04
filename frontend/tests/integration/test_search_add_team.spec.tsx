@@ -6,7 +6,11 @@ import App from '../../src/App'
 import { vi } from 'vitest'
 import { describe, it, expect, beforeAll, afterEach } from 'vitest';
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+let queryClient: QueryClient;
+
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
 
 const mockList = {
   results: [
@@ -102,7 +106,10 @@ describe('Search -> Detail -> Add to Team flow', () => {
       </QueryClientProvider>
     )
 
-    // Team member should persist
-    await waitFor(() => expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument())
+    // Team member should persist – scope to team panel again after re‑render
+    const teamPanelAfterReload = screen.getByRole('heading', { name: 'Team' }).closest('.border.rounded.p-4')!;
+    await waitFor(() => {
+      expect(within(teamPanelAfterReload).getByText('bulbasaur')).toBeInTheDocument();
+    });
   })
 })

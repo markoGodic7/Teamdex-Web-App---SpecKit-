@@ -16,6 +16,27 @@ const queryClient = new QueryClient({
   },
 });
 
+// Preload name index and first-page details to improve perceived performance
+import { listPokemonNames, getPokemon } from './lib/api';
+(async function prefetchStartup() {
+  try {
+    const names = await queryClient.fetchQuery({
+      queryKey: ['names'],
+      queryFn: () => listPokemonNames(),
+    });
+    const first = names.slice(0, 12);
+    for (const item of first) {
+      const match = /\/pokemon\/(\d+)\/?$/.exec(item.url);
+      const id = match ? Number(match[1]) : null;
+      if (id != null) {
+        queryClient.prefetchQuery(['pokemon', id], () => getPokemon(id));
+      }
+    }
+  } catch (e) {
+    // ignore prefetch errors
+  }
+})();
+
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
