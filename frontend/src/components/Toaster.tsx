@@ -30,7 +30,7 @@ export function ToasterProvider({ children }: { children: React.ReactNode }) {
                 onClick={() => { t.onAction?.(); remove(t.id); }}
               >{t.actionLabel}</button>
             )}
-            <button className="ml-2 text-sm text-slate-500" onClick={() => remove(t.id)}>✕</button>
+            <button aria-label="Dismiss notification" className="ml-2 text-sm text-slate-500" onClick={() => remove(t.id)}>✕</button>
           </div>
         ))}
       </div>

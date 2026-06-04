@@ -5,7 +5,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from '../../src/App';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+let queryClient: QueryClient;
+
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
 
 const mockList = {
   results: [
@@ -50,29 +54,31 @@ const mockDetail2 = {
   ],
 };
 
-vi.stubGlobal('fetch', async (input: RequestInfo) => {
-  const url = String(input)
-  if (url.includes('/pokemon?')) {
-    return new Response(JSON.stringify(mockList), { status: 200 })
-  }
-  if (
-    url.endsWith('/pokemon/1') ||
-    url.endsWith('/pokemon/1/') ||
-    url.endsWith('/pokemon/bulbasaur') ||
-    url.endsWith('/pokemon/bulbasaur/')
-  ) {
-    return new Response(JSON.stringify(mockDetail1), { status: 200 })
-  }
-  if (
-    url.endsWith('/pokemon/2') ||
-    url.endsWith('/pokemon/2/') ||
-    url.endsWith('/pokemon/ivysaur') ||
-    url.endsWith('/pokemon/ivysaur/')
-  ) {
-    return new Response(JSON.stringify(mockDetail2), { status: 200 })
-  }
-  return new Response('{}', { status: 404 })
-})
+beforeEach(() => {
+  vi.stubGlobal('fetch', async (input: RequestInfo) => {
+    const url = String(input);
+    if (url.includes('/pokemon?')) {
+      return new Response(JSON.stringify(mockList), { status: 200 });
+    }
+    if (
+      url.endsWith('/pokemon/1') ||
+      url.endsWith('/pokemon/1/') ||
+      url.endsWith('/pokemon/bulbasaur') ||
+      url.endsWith('/pokemon/bulbasaur/')
+    ) {
+      return new Response(JSON.stringify(mockDetail1), { status: 200 });
+    }
+    if (
+      url.endsWith('/pokemon/2') ||
+      url.endsWith('/pokemon/2/') ||
+      url.endsWith('/pokemon/ivysaur') ||
+      url.endsWith('/pokemon/ivysaur/')
+    ) {
+      return new Response(JSON.stringify(mockDetail2), { status: 200 });
+    }
+    return new Response('{}', { status: 404 });
+  });
+});
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -108,8 +114,10 @@ describe('Team management flow', () => {
 
     // --- Scope all team checks to the team panel container ---
     const teamPanel = screen.getByRole('heading', { name: 'Team' }).closest('.border.rounded.p-4')!;
-    expect(within(teamPanel).getByText('bulbasaur')).toBeInTheDocument();
-    expect(within(teamPanel).getByText('ivysaur')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(within(teamPanel).getByText('bulbasaur')).toBeInTheDocument();
+      expect(within(teamPanel).getByText('ivysaur')).toBeInTheDocument();
+    });
 
     // Totals: HP sum (45 + 60 = 105)
     const hpRow = within(teamPanel).getByText('HP').closest('.py-1')!;

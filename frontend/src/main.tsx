@@ -20,9 +20,11 @@ const queryClient = new QueryClient({
 import { listPokemonNames, getPokemon } from './lib/api';
 (async function prefetchStartup() {
   try {
-    const namesData = await queryClient.prefetchQuery(['names'], () => listPokemonNames());
-    const data: any = queryClient.getQueryData(['names']) || namesData;
-    const first = Array.isArray(data) ? data.slice(0, 12) : (data?.results?.slice(0, 12) || []);
+    const names = await queryClient.fetchQuery({
+      queryKey: ['names'],
+      queryFn: () => listPokemonNames(),
+    });
+    const first = names.slice(0, 12);
     for (const item of first) {
       const match = /\/pokemon\/(\d+)\/?$/.exec(item.url);
       const id = match ? Number(match[1]) : null;

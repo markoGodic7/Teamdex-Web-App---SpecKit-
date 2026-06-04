@@ -6,7 +6,11 @@ import App from '../../src/App'
 import { vi } from 'vitest'
 import { describe, it, expect, beforeAll, afterEach } from 'vitest';
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+let queryClient: QueryClient;
+
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
 
 const mockList = {
   results: [

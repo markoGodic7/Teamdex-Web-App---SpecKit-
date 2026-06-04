@@ -21,6 +21,7 @@ function StatBar({ label, value, max }: { label: string; value: number; max: num
 export default function TeamPanel() {
   const { members, totals, remove } = useTeam();
   const prevRef = useRef<number[]>([]);
+  const initializedRef = useRef(false);
   const [liveMessage, setLiveMessage] = useState<string>('');
 
   useEffect(() => {
@@ -34,8 +35,13 @@ export default function TeamPanel() {
   }, []);
 
   useEffect(() => {
-    const prevIds = prevRef.current;
     const currIds = members.map((m) => m.id);
+    if (!initializedRef.current) {
+      prevRef.current = currIds;
+      initializedRef.current = true;
+      return;
+    }
+    const prevIds = prevRef.current;
     // detect additions
     const added = currIds.filter((id) => id != null && !prevIds.includes(id));
     const removed = prevIds.filter((id) => id != null && !currIds.includes(id));
