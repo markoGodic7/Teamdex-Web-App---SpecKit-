@@ -37,15 +37,25 @@ vi.stubGlobal('fetch', async (input: RequestInfo) => {
   if (url.includes('/pokemon?')) {
     return new Response(JSON.stringify(mockList), { status: 200 })
   }
-  if (url.endsWith('/pokemon/1') || url.endsWith('/pokemon/1/')) {
+  if (
+    url.endsWith('/pokemon/1') ||
+    url.endsWith('/pokemon/1/') ||
+    url.endsWith('/pokemon/bulbasaur') ||
+    url.endsWith('/pokemon/bulbasaur/')
+  ) {
     return new Response(JSON.stringify(mockDetail), { status: 200 })
   }
   return new Response('{}', { status: 404 })
 })
 
+afterEach(() => {
+  vi.unstubAllGlobals()
+  localStorage.clear()
+})
+
 describe('Search -> Detail -> Add to Team flow', () => {
   test('searches, opens detail, adds to team and persists', async () => {
-    render(
+    const { unmount } = render(
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>
@@ -71,18 +81,23 @@ describe('Search -> Detail -> Add to Team flow', () => {
     const addButton = screen.getByText(/Add to Team/i)
     await userEvent.click(addButton)
 
-    // Team panel should show bulbasaur
-    await waitFor(() => expect(screen.getByText(/bulbasaur/i)).toBeInTheDocument())
+    // Team panel should show bulbasaur – scope inside the team panel container
+    const teamPanel = screen.getByRole('heading', { name: 'Team' }).closest('.border.rounded.p-4')!;
+    await waitFor(() => {
+    expect(within(teamPanel).getByText('bulbasaur')).toBeInTheDocument();
+    });
 
-    // Check totals reflect HP
-    await waitFor(() => expect(screen.getByText('HP')).toBeInTheDocument())
-    expect(screen.getByText('45')).toBeInTheDocument()
+    // Check totals reflect HP inside the team panel – find the HP stat row
+    const hpLabel = within(teamPanel).getByText('HP');
+    const hpRow = hpLabel.closest('.py-1')!; // the div containing HP label + value
+    expect(within(hpRow).getByText('45')).toBeInTheDocument();
 
     // Simulate reload by re-rendering component (localStorage should persist)
     // Clear DOM and render again
-    queryClient.clear()
+    unmount()
+    const reloadedClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
     render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={reloadedClient}>
         <App />
       </QueryClientProvider>
     )
