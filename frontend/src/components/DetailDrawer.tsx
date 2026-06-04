@@ -39,7 +39,11 @@ export default function DetailDrawer({ idOrName, onClose }: { idOrName: string |
           </div>
         </div>
       )}
-      {error && <div role="alert">Error loading Pokémon</div>}
+      {error ? (
+        <div role="alert">
+          Error loading Pokémon: {error instanceof Error ? error.message : 'An unexpected error occurred.'}
+        </div>
+      ) : null}
       {data && (
         <div>
           <div className="flex items-center gap-4">
