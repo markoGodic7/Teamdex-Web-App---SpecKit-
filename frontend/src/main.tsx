@@ -37,6 +37,15 @@ import { listPokemonNames, getPokemon } from './lib/api';
   }
 })();
 
+// Register service worker to enable offline cached detail views (T033)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then((reg) => {
+    console.log('Service worker registered:', reg.scope);
+  }).catch((err) => {
+    console.warn('Service worker registration failed:', err);
+  });
+}
+
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
