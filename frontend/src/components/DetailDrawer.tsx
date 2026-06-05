@@ -17,7 +17,7 @@ export default function DetailDrawer({ idOrName, onClose }: { idOrName: string |
   const { data, isLoading, error, refetch } = useQuery(['pokemon', idOrName], () => getPokemon(idOrName as any), {
     enabled: !!idOrName,
   });
-  const pokemon = (data ?? cached) as any;
+  const cached = queryClient.getQueryData(['pokemon', idOrName]);
 
   const team = useTeam();
   const { push } = useToasts();
@@ -51,7 +51,7 @@ export default function DetailDrawer({ idOrName, onClose }: { idOrName: string |
           </div>
         </div>
       ) : null}
-      {pokemon && (
+      {(data || cached) && (
         <div>
           {error && cached && (
             <div className="mb-2 text-sm text-yellow-700">Showing cached data (may be stale)</div>
@@ -59,12 +59,12 @@ export default function DetailDrawer({ idOrName, onClose }: { idOrName: string |
           <div className="flex items-center gap-4">
             <img
               src={(data || cached).sprites?.other?.['official-artwork']?.front_default || (data || cached).sprites?.front_default || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150"><rect fill="%23e2e8f0" width="150" height="150"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14">No Image</text></svg>'}
-              alt={pokemon.name}
+              alt={(data || cached).name}
               className="w-32 h-32 object-contain"
               onError={(e) => { const t = e.currentTarget as HTMLImageElement; t.onerror = null; t.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150"><rect fill="%23e2e8f0" width="150" height="150"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14">No Image</text></svg>'; }}
             />
             <div>
-              <h2 className="text-xl font-semibold">{pokemon.name} (#{pokemon.id})</h2>
+              <h2 className="text-xl font-semibold">{(data || cached).name} (#{(data || cached).id})</h2>
               <div className="mt-2">{(data || cached).types.map((t: any) => <span key={t.slot} className="inline-block mr-2 px-2 py-1 bg-slate-100 rounded">{t.type.name}</span>)}</div>
             </div>
           </div>
@@ -78,11 +78,11 @@ export default function DetailDrawer({ idOrName, onClose }: { idOrName: string |
             ))}
           </ul>
           <div className="mt-4">
-            {team.contains(pokemon.id) ? (
-              <button className="px-3 py-2 border rounded" onClick={() => team.remove(pokemon.id)}>Remove from Team</button>
+            {team.contains(data.id) ? (
+              <button className="px-3 py-2 border rounded" onClick={() => team.remove(data.id)}>Remove from Team</button>
             ) : (
               <button className="px-3 py-2 bg-blue-600 text-white rounded" onClick={() => {
-                const payload = pokemon;
+                const payload = (data || cached);
                 const res = team.add({ id: payload.id, name: payload.name, sprites: payload.sprites, types: payload.types, stats: payload.stats });
                 if (!res.success) {
                   if (res.reason === 'duplicate') {
