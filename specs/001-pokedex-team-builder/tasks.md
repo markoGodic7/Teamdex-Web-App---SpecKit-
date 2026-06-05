@@ -16,11 +16,11 @@
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-- [ ] T006 [P] Implement `src/lib/api.ts` fetch helpers and wrappers for PokeAPI endpoints (`/pokemon?limit=2000&offset=0` and `/pokemon/{id or name}`) with basic error handling (frontend/src/lib)
-- [ ] T007 [P] Configure TanStack Query client with default `staleTime=10m`, `cacheTime` policy, and request dedupe; add QueryClient provider in `src/main.tsx` (frontend/src)
-- [ ] T008 [P] Add simple caching layer for name index and detail responses (leveraging TanStack Query + optional localStorage fallback) (`frontend/src/lib/cache.ts`)
-- [ ] T009 [P] Implement `src/hooks/useDebouncedValue.ts` (300ms) and `src/hooks/useTeam.ts` (team state, localStorage persistence, add/remove, compute totals) (frontend/src/hooks)
-- [ ] T010 Setup basic routing/layout and keyboard focus management utilities (`frontend/src/lib/keyboard.ts`)
+- [x] T006 [P] Implement `src/lib/api.ts` fetch helpers and wrappers for PokeAPI endpoints (`/pokemon?limit=2000&offset=0` and `/pokemon/{id or name}`) with basic error handling (frontend/src/lib)
+- [x] T007 [P] Configure TanStack Query client with default `staleTime=10m`, `cacheTime` policy, and request dedupe; add QueryClient provider in `src/main.tsx` (frontend/src)
+- [x] T008 [P] Add simple caching layer for name index and detail responses (leveraging TanStack Query + optional localStorage fallback) (`frontend/src/lib/cache.ts`)
+- [x] T009 [P] Implement `src/hooks/useDebouncedValue.ts` (300ms) and `src/hooks/useTeam.ts` (team state, localStorage persistence, add/remove, compute totals) (frontend/src/hooks)
+- [x]` T010 Setup basic routing/layout and keyboard focus management utilities (`frontend/src/lib/keyboard.ts`)
 
 **Checkpoint**: Foundation ready — UI and story work can begin
 
@@ -32,12 +32,13 @@
 
 **Independent Test**: Type a name, select suggestion, open detail, add to team, verify Team panel updates immediately and persists after reload.
 
-- [ ] T011 [P] [US1] Create `src/components/SearchBox.tsx` with keyboard navigation, ARIA attributes, and debounced suggestions using the name-index (`frontend/src/components`)
-- [ ] T012 [US1] Create `src/components/ResultsGrid.tsx` and `src/components/PokemonCard.tsx` for paginated result listing and artwork preview (frontend/src/components)
-- [ ] T013 [US1] Create `src/components/DetailDrawer.tsx` that fetches full data via `api.getPokemon` and shows artwork, types, base stats, and Add to Team button (frontend/src/components)
-- [ ] T014 [US1] Wire `DetailDrawer` Add to Team button to `useTeam.add()` so that Team panel receives immediate update (frontend/src/hooks + frontend/src/components)
-- [ ] T015 [US1] Add loading skeletons and error states for search and detail views (frontend/src/components)
-- [ ] T016 [US1] Add integration test task: `tests/integration/test_search_add_team.spec.tsx` to verify search→detail→add→persistence (optional but recommended) (tests/)
+- [x] T011 [P] [US1] Create `src/components/SearchBox.tsx` with keyboard navigation, ARIA attributes, and debounced suggestions using the name-index (`frontend/src/components`)
+- [x] T012 [US1] Create `src/components/ResultsGrid.tsx` and `src/components/PokemonCard.tsx` for paginated result listing and artwork preview (frontend/src/components)
+- [x] T013 [US1] Create `src/components/DetailDrawer.tsx` that fetches full data via `api.getPokemon` and shows artwork, types, base stats, and Add to Team button (frontend/src/components)
+- [x] T014 [US1] Wire `DetailDrawer` Add to Team button to `useTeam.add()` so that Team panel receives immediate update (frontend/src/hooks + frontend/src/components)
+- [x] T015 [US1] Add loading skeletons and error states for search and detail views (frontend/src/components)
+- [x] T016 [US1] Add integration test task: `tests/integration/test_search_add_team.spec.tsx` to verify search→detail→add→persistence (optional but recommended) (tests/)
+- [x] T016 [US1] Add integration test task: `tests/integration/test_search_add_team.spec.tsx` to verify search→detail→add→persistence (optional but recommended) (tests/)
 
 ---
 
@@ -47,9 +48,9 @@
 
 **Independent Test**: Navigate pages, open cards, add to team, verify per-stat totals.
 
-- [ ] T017 [P] [US2] Implement paginated listing using the PokeAPI list endpoint (ResultsGrid pagination controls) (frontend/src/components)
-- [ ] T018 [US2] Ensure cards link to `DetailDrawer` and use cached detail responses when available (frontend/src/components)
-- [ ] T019 [US2] Add accessibility labels and keyboard navigation for paging controls (frontend/src/components)
+- [x] T017 [P] [US2] Implement paginated listing using the PokeAPI list endpoint (ResultsGrid pagination controls) (frontend/src/components)
+- [x] T018 [US2] Ensure cards link to `DetailDrawer` and use cached detail responses when available (frontend/src/components)
+- [x] T019 [US2] Add accessibility labels and keyboard navigation for paging controls (frontend/src/components)
 
 ---
 
@@ -59,21 +60,32 @@
 
 **Independent Test**: Add multiple Pokémon, verify totals update, remove a member and verify totals adjust, reload page to confirm persistence.
 
-- [ ] T020 [US3] Create `src/components/TeamPanel.tsx` to render team list, per-stat bars, totals, and empty state (frontend/src/components)
-- [ ] T021 [US3] Implement visual per-stat bars and numeric totals; ensure ARIA live regions announce changes when team updates (frontend/src/components)
-- [ ] T022 [US3] Enforce team size limit (6) in `useTeam` and show accessible message when limit reached (frontend/src/hooks + frontend/src/components)
-- [ ] T023 [US3] Implement Remove action wired to `useTeam.remove()` with immediate UI refresh (frontend/src/components)
-- [ ] T024 [US3] Add tests: `tests/integration/test_team_management.spec.tsx` (add/remove/persistence) (tests/)
+- [x] T020 [US3] Create `src/components/TeamPanel.tsx` to render team list, per-stat bars, totals, and empty state (frontend/src/components)
+- [x] T021 [US3] Implement visual per-stat bars and numeric totals; ensure ARIA live regions announce changes when team updates (frontend/src/components)
+- [x] T022 [US3] Enforce team size limit (6) in `useTeam` and show accessible message when limit reached (frontend/src/hooks + frontend/src/components)
+- [x] T023 [US3] Implement Remove action wired to `useTeam.remove()` with immediate UI refresh (frontend/src/components)
+- [x] T024 [US3] Add tests: `tests/integration/test_team_management.spec.tsx` (add/remove/persistence) (tests/)
+ - [x] T023 [US3] Implement Remove action wired to `useTeam.remove()` with immediate UI refresh (frontend/src/components)
+ - [x] T024 [US3] Add tests: `tests/integration/test_team_management.spec.tsx` (add/remove/persistence) (tests/)
 
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns (P2)
 
 - [ ] T025 Accessibility audit: verify keyboard navigation, focus rings, and WCAG AA contrast; update styles as needed (frontend/)
-- [ ] T026 Theme toggles: implement Light and High Contrast theme switch and ensure focus visibility (frontend/src/components)
-- [ ] T027 Handle missing artwork fallbacks and sprite fallbacks in UI (frontend/src/components)
-- [ ] T028 Implement error toasts with retry for network failures and use cached data where possible (frontend/src/components)
-- [ ] T029 Performance tuning: preload first page of results on app load and measure first-detail load time (frontend/src)
+- [x] T026 Theme toggles: implement Light and High Contrast theme switch and ensure focus visibility (frontend/src/components)
+- [x] T027 Handle missing artwork fallbacks and sprite fallbacks in UI (frontend/src/components)
+- [x] T028 Implement error toasts with retry for network failures and use cached data where possible (frontend/src/components)
+- [x] T029 Performance tuning: preload first page of results on app load and measure first-detail load time (frontend/src)
+
+- [ ] T033 Implement offline cached detail views (service worker / cache-first detail responses) (frontend/src)
+
+- [x] T033 Implement offline cached detail views (service worker / cache-first detail responses) (frontend/src)
+	- [x] Define caching policy: cache-first for `pokemon/{id}` details, TTL (e.g. 1 hour), cache name
+	- [x] Implement service worker (Workbox or native) to cache detail responses at runtime
+	- [x] Register service worker in `frontend/src/main.tsx` with opt-in and telemetry/logging
+	- [x] Add tests: integration test verifying detail view loads from cache when offline
+	- [x] Update `README.md` with verification steps and limitations (offline behavior, cache clearing)
 
 ---
 

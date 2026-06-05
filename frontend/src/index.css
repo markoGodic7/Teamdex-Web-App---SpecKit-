@@ -22,10 +22,36 @@ body {
   color: var(--text) !important;
 }
 
+/* High-contrast overrides for common Tailwind utility classes used across the app
+   These ensure components that use utility classes (bg-white, bg-slate-100, etc.)
+   respect the high-contrast theme when `.hc` is applied to the document. */
+.hc .bg-white { background-color: var(--bg) !important; }
+.hc .text-slate-900 { color: var(--text) !important; }
+.hc .bg-slate-100 { background-color: var(--muted) !important; color: #000 !important; }
+.hc .bg-blue-600 { background-color: var(--text) !important; color: var(--bg) !important; }
+.hc .text-white { color: var(--bg) !important; }
+.hc .bg-yellow-300 { background-color: var(--muted) !important; color: #000 !important; }
+.hc .border { border-color: var(--text) !important; }
+
 .focus-ring:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(59,130,246,0.6);
   border-radius: 4px;
+}
+
+/* Smooth transitions for theme changes and UI state.
+   Respects user's reduced motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+/* Apply transitions to common containers and utility-backed elements */
+body, #root, .min-h-screen, .card-single, .focus-ring, .border,
+.bg-white, .bg-slate-100, .bg-blue-600, .bg-yellow-300,
+.text-slate-900, .text-white {
+  transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 }
 
 /* Make .object-contain usable on wrapper divs as well as on img elements
@@ -41,4 +67,10 @@ body {
 
 .object-contain img {
   object-fit: contain;
+}
+
+.card-single,
+.team-wrapper {
+  display: flex;
+  flex-wrap: wrap;
 }
