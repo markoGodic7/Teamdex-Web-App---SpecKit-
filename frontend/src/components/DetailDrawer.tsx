@@ -78,8 +78,8 @@ export default function DetailDrawer({ idOrName, onClose }: { idOrName: string |
             ))}
           </ul>
           <div className="mt-4">
-            {team.contains(data.id) ? (
-              <button className="px-3 py-2 border rounded" onClick={() => team.remove(data.id)}>Remove from Team</button>
+            {team.contains((data || cached).id) ? (
+            <button className="px-3 py-2 border rounded" onClick={() => team.remove((data || cached).id)}>Remove from Team</button>
             ) : (
               <button className="px-3 py-2 bg-blue-600 text-white rounded" onClick={() => {
                 const payload = (data || cached);
