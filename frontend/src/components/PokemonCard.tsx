@@ -11,7 +11,7 @@ export default function PokemonCard({ id, name, sprite, onOpen }: { id?: number;
   }
 
   return (
-    <div className="border rounded p-3 flex items-center gap-3" tabIndex={0} role="button" aria-label={`Open details for ${name}`} onKeyDown={onKey}>
+    <div className="card-single border rounded p-3 flex items-center gap-3" tabIndex={0} role="button" aria-label={`Open details for ${name}`} onKeyDown={onKey}>
       <img
         src={sprite || FALLBACK_SVG}
         alt={name}

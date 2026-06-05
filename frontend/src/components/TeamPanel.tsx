@@ -75,7 +75,7 @@ export default function TeamPanel() {
       ) : (
         <div className="space-y-3">
           {members.map((m) => (
-            <div key={m.id} className="flex items-center gap-3">
+            <div key={m.id} className="flex items-center gap-3 team-wrapper">
               <img
                 src={m.sprites?.other?.['official-artwork']?.front_default || m.sprites?.front_default || FALLBACK_SVG}
                 alt={m.name}
